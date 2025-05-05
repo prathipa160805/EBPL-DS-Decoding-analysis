@@ -1,0 +1,82 @@
+#source code#
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import re
+
+# Sample Social Media Posts
+data = {
+    'user': ['@a', '@b', '@c', '@d', '@e'],
+    'post': [
+        "I am so happy and excited about this new opportunity!",
+        "Feeling very sad and broken after the incident.",
+        "That movie was terrifying, I had goosebumps.",
+        "I absolutely love this place, it's magical!",
+        "Ugh, this is so frustrating and annoying!"
+    ]
+}
+
+df = pd.DataFrame(data)
+
+# Emotion keywords dictionary
+emotion_keywords = {
+    'joy': ['happy', 'joy', 'excited', 'love', 'awesome', 'great'],
+    'sadness': ['sad', 'broken', 'depressed', 'down'],
+    'anger': ['angry', 'mad', 'frustrating', 'annoying', 'furious'],
+    'fear': ['terrifying', 'scared', 'afraid', 'nervous', 'goosebumps'],
+    'surprise': ['surprised', 'shocked', 'amazed'],
+    'disgust': ['disgusting', 'gross', 'nasty']
+}
+
+# Function to detect emotion
+def detect_emotion(text):
+    text = text.lower()
+    for emotion, keywords in emotion_keywords.items():
+        for word in keywords:
+            if re.search(r'\b' + re.escape(word) + r'\b', text):
+                return emotion
+    return 'neutral'
+
+# Apply emotion detection
+df['dominant_emotion'] = df['post'].apply(detect_emotion)
+
+# Display detected emotions
+print(df[['post', 'dominant_emotion']])
+
+# Set style
+sns.set(style="whitegrid")
+
+# Bar Chart - Emotion Distribution
+plt.figure(figsize=(8, 5))
+bar_colors = {
+    'joy': 'green',
+    'sadness': 'blue',
+    'anger': 'red',
+    'fear': 'purple',
+    'surprise': 'orange',
+    'disgust': 'brown',
+    'neutral': 'gray'
+}
+emotion_counts = df['dominant_emotion'].value_counts()
+emotion_order = emotion_counts.index
+bar_palette = [bar_colors[emotion] for emotion in emotion_order]
+
+sns.countplot(data=df, x='dominant_emotion', order=emotion_order, palette=bar_palette)
+plt.title('Emotion Distribution (Bar Chart)')
+plt.xlabel('Emotion')
+plt.ylabel('Post Count')
+plt.tight_layout()
+plt.show()
+print("")
+
+# Line Chart - Emotion Trend by Post Order
+plt.figure(figsize=(10, 4))
+df['post_index'] = df.index + 1
+sns.lineplot(x='post_index', y='dominant_emotion', data=df, marker='o', linewidth=2)
+plt.title('Emotion Trend Across Posts (Line Chart)')
+plt.xlabel('Post Number')
+plt.ylabel('Dominant Emotion')
+plt.yticks(rotation=45)
+plt.tight_layout()
+plt.show()
