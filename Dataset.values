@@ -1,0 +1,11 @@
+
+
+#dataset values#
+
+
+post_id,user_id,platform,timestamp,text,sentiment,topic
+001,u123,Twitter,2025-05-01 10:00:00,"I love the new features on this app!",positive,technology
+002,u456,Reddit,2025-05-01 10:05:00,"This update ruined everything.",negative,technology
+003,u789,Facebook,2025-05-01 10:10:00,"Not sure how I feel about this change.",neutral,technology
+004,u321,Twitter,2025-05-02 09:15:00,"The movie was fantastic!",positive,entertainment
+005,u654,Reddit,2025-05-02 09:20:00,"Worst customer service ever.",negative,customer_service
